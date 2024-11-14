@@ -25,6 +25,7 @@
       width: 100%;
       max-width: 1200px;
       margin: auto;
+      position: relative;
     }
     h1, h2 {
       margin-bottom: 30px;
@@ -92,6 +93,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-wrap: wrap;
     }
     .select-checkbox {
       margin-right: 10px;
@@ -104,6 +106,8 @@
       color: #fff;
       text-align: center;
       margin-left: 10px;
+      word-wrap: break-word;
+      overflow-wrap: anywhere;
     }
     .media-card-text {
       color: #00bcd4;
@@ -114,12 +118,14 @@
       display: flex;
       justify-content: center;
       flex-wrap: wrap;
+      gap: 10px;
     }
     .btn {
-      margin: 5px;
+      margin: 5px 0;
       transition: background 0.3s;
       border: none;
       padding: 10px 15px;
+      flex: 1 1 auto;
     }
     .btn:hover {
       opacity: 0.9;
@@ -176,6 +182,15 @@
       position: absolute;
       top: 20px;
       right: 20px;
+      background-color: transparent;
+      border: none;
+      color: #fff;
+      font-size: 20px;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+    .logout-button:hover {
+      color: #00bcd4;
     }
     /* Modal Styles */
     .modal-confirm {
@@ -257,6 +272,9 @@
       .media-card-title {
         font-size: 1em;
       }
+      .logout-button {
+        font-size: 18px;
+      }
     }
     /* Hidden class */
     .hidden {
@@ -266,11 +284,13 @@
 </head>
 <body>
   <div id="app">
-    <button class="btn btn-danger logout-button hidden" id="logoutButton">Logout</button>
-    <h1>Video Portal</h1>
+    <button class="logout-button hidden" id="logoutButton" title="Logout">
+      <i class="fas fa-sign-out-alt"></i>
+    </button>
+    <h1>📹 Video Portal</h1>
     <!-- PIN Entry Section -->
     <div class="container-box" id="pinContainer">
-      <h2>Please enter the PIN to access the portal.</h2>
+      <h2>🔒 Please enter the PIN to access the portal.</h2>
       <input type="password" id="pinInput" placeholder="Enter PIN" />
       <div class="remember-me">
         <input type="checkbox" id="rememberMe" />
@@ -283,7 +303,7 @@
     <div id="mainContent" class="hidden">
       <!-- Upload Section -->
       <div class="container-box">
-        <h2>Upload Video</h2>
+        <h2>📤 Upload Video</h2>
         <button id="uploadWidgetButton" class="btn btn-download">
           <i class="fas fa-cloud-upload-alt icon"></i>Upload via Cloudinary
         </button>
@@ -291,7 +311,7 @@
       </div>
       <!-- Gallery Section -->
       <div class="container-box">
-        <h2>Available Videos</h2>
+        <h2>🎥 Available Videos</h2>
         <!-- Gallery Controls -->
         <div class="gallery-controls" id="galleryControls">
           <button class="btn" onclick="selectAll()">Select All</button>
@@ -497,7 +517,7 @@
               <h5 class="media-card-title">${file.name}</h5>
             </div>
             <p class="media-card-text">
-              Time left: <span class="countdown" data-timeleft="${timeLeft}" data-uploadtime="${file.uploadTime}"></span>
+              ⏳ Time left: <span class="countdown" data-timeleft="${timeLeft}" data-uploadtime="${file.uploadTime}"></span>
             </p>
             <div class="btn-group">
               <button class="btn btn-download" onclick="downloadFile('${downloadUrl}', '${file.name}')">
@@ -632,9 +652,10 @@
       const totalSize = sizes.reduce((a, b) => a + b, 0);
       const totalSizeMB = (totalSize / (1024 * 1024)).toFixed(2);
       const currentTime = new Date().toLocaleString();
+      const links = urls.map(url => `• ${url}`).join('\n');
       const embed = {
         title: "🎬 New Videos Uploaded",
-        description: urls.join('\n'),
+        description: links,
         color: 3066993,
         fields: [
           {
